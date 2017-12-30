@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  div.container
+    form.input-form(name="auth-statify", method="post", action="authorize")
+      div.actions
+        input(type="submit", value="Authorize Statify")
+
+    if results
+      if results.removed_tracks && results.removed_tracks.length
+        h2 Unique Tracks
+        p Copy and paste this back into your Spotify playlist.
+        textarea(name="unique-tracks", cols="50", rows="10", readonly="true")
+          | #{results.unique_tracks.join('\n')}
+
+        h2 Duplicate Tracks
+        p Not to worry, one copy of these tracks is still in your playlist.
+        each track in results.removed_tracks
+          div.track
+            div.track-image
+              img(src=track.album.image, alt=track.album.name, width="75px")
+            div.track-info
+              p.track-name= track.name
+              p.track-artists= track.artists.join(', ')
+      else
+        p There were no duplicate tracks in the list. You're all set!
+    else
+      p Drag and drop your playlist contents into the textbox below.
+
+
