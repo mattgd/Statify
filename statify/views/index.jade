@@ -1,30 +1,24 @@
 extends layout
 
 block content
-  div.container
-    form.input-form(name="auth-statify", method="post", action="authorize")
-      div.actions
-        input(type="submit", value="Authorize Statify")
-
-    if results
-      if results.removed_tracks && results.removed_tracks.length
-        h2 Unique Tracks
-        p Copy and paste this back into your Spotify playlist.
-        textarea(name="unique-tracks", cols="50", rows="10", readonly="true")
-          | #{results.unique_tracks.join('\n')}
-
-        h2 Duplicate Tracks
-        p Not to worry, one copy of these tracks is still in your playlist.
-        each track in results.removed_tracks
-          div.track
-            div.track-image
-              img(src=track.album.image, alt=track.album.name, width="75px")
-            div.track-info
-              p.track-name= track.name
-              p.track-artists= track.artists.join(', ')
+  div.wrapper
+    if authorized && data
+      if data.top_artists
+        h2 Your Top Artists
+        div.container
+          each artist in data.top_artists
+            div.artist
+              if artist.images
+                div.artist-image
+                  img(src=artist.images[0].url, alt=artist.name)
+              div.artist-info
+                p.artist-name=artist.name
+                p.artist-details Followers: #{artist.followers}
+                p.artist-details Genres: #{artist.genres.join(', ')}
       else
-        p There were no duplicate tracks in the list. You're all set!
+        p There were no top artists found for your account.
     else
-      p Drag and drop your playlist contents into the textbox below.
-
-
+      div.form-container
+        form.auth-form(name="auth-statify", method="post", action="authorize")
+          div.actions
+            input(type="submit", value="Authorize Statify")

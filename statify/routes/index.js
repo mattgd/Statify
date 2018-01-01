@@ -6,56 +6,13 @@ var localConfig = require('../local_config');
 var SpotifyWebApi = require('spotify-web-api-node');
 var url = require('url');
 
-/**
- * getJSON:  REST get request returning JSON object(s)
- * @param options: http options object
- * @param callback: callback to pass the results JSON object(s) back
- */
-exports.getJSON = function(options, onResult)
-{
-    console.log("rest::getJSON");
-
-    var port = options.port == 443 ? https : http;
-    var req = port.request(options, function(res)
-    {
-        var output = '';
-        console.log(options.host + ':' + res.statusCode);
-        res.setEncoding('utf8');
-
-        res.on('data', function (chunk) {
-            output += chunk;
-        });
-
-        res.on('end', function() {
-            var obj = JSON.parse(output);
-            onResult(res.statusCode, obj);
-        });
-    });
-
-    req.on('error', function(err) {
-        //res.send('error: ' + err.message);
-    });
-
-    req.end();
-};
-
-var spotifyApi = new SpotifyWebApi({
+var credentials = {
   clientId : localConfig.spotify.clientId,
   clientSecret : localConfig.spotify.clientSecret,
-  redirectUri : '/'
-});
+  redirectUri : 'http://localhost:3000/'
+};
 
-// Get access token
-spotifyApi.clientCredentialsGrant()
-  .then(function(data) {
-    //console.log('The access token expires in ' + data.body['expires_in']);
-    //console.log('The access token is ' + data.body['access_token']);
-
-    // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body['access_token']);
-  }, function(err) {
-    console.log('Something went wrong when retrieving an access token', err.message);
-  });
+var spotifyApi = new SpotifyWebApi(credentials);
 
 /**
  * Returns true if the line matches a Spotify track URL,
@@ -77,40 +34,6 @@ var isSpotifyLink = function(line) {
 var getTrackId = function(spotifyLink) {
   var match = /[^/]+(?=\/$|$)/;
   return match.exec(spotifyLink)[0];
-};
-
-/**
- * Returns an Array of track IDs that were duplicates in trackIds.
- * This Array contains a unique set of IDs, which were duplicates.
- * @param {Array} trackIds The track IDs to find duplicares of.
- * @returns an Array of the duplicate track IDs.
- */
-var getDuplicateTracks = function(trackIds) {
-  var sortedTracks = trackIds.slice().sort();
-  var duplicates = [];
-  
-  for (var i = 0; i < trackIds.length - 1; i++) {
-    if (sortedTracks[i + 1] == sortedTracks[i]) {
-      duplicates.push(sortedTracks[i]);
-    }
-  }
-
-  return getUniqueTracks(duplicates);
-};
-
-/**
- * Returns an Array of unique track IDs from trackIds
- * @param {Array} trackIds The trackIds to deduplicate.
- * @returns an Array of unique track IDs from trackIds
- */
-var getUniqueTracks = function(trackIds) {
-  return trackIds.reduce(function(accum, current) {
-    if (accum.indexOf(current) < 0) {
-        accum.push(current);
-    }
-
-    return accum;
-  }, []);
 };
 
 /**
@@ -153,18 +76,50 @@ var parseTracks = function(tracks) {
 };
 
 /**
- * Returns an Array of open.spotify.com/track URLs from
- * and Array of Spotify track IDs.
- * @param {Array} tracks The track IDs to convert.
- * @returns an Array of open.spotify.com/track URLs from
- * and Array of Spotify track IDs.
+ * Parses a Spotify Artist object and returns an Artist JSON object
+ * with the Statify-useful information.
+ * @param {object} artist The artist to parse.
+ * @returns an Artist JSON object with the Statify-useful information.
  */
-var createExternalUrls = function(tracks) {
-  for (var i = 0, len = tracks.length; i < len; i++) {
-    tracks[i] = "https://open.spotify.com/track/" + tracks[i];
+function parseArtist(artist) {
+  return {
+    followers: artist.followers.total,
+    genres: artist.genres,
+    images: artist.images,
+    name: artist.name,
+    popularity: artist.popularity,
+    url: artist.external_urls.spotify
   }
+}
 
-  return tracks;
+function setSpotifyAccessToken(auth_code) {
+  // Retrieve an access token and a refresh token
+  spotifyApi.authorizationCodeGrant(auth_code)
+    .then(function(data) {
+      // Set the access token to use it in later calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.setRefreshToken(data.body['refresh_token']);
+      return true;
+    }, function(err) {
+      console.log('Something went wrong with gaining authorization code grant:', err);
+      return false;
+    });
+}
+
+function getTopArtists() {
+  var top_artists = [];
+
+  spotifyApi.getMyTopArtists()
+    .then(function(data) {
+      artists = data.body.items;
+      for (var i = 0; i < artists.length; i++) {
+        top_artists.push(parseArtist(artists[i]));
+      }
+      
+      return top_artists;
+    }, function(err) {
+      console.log('Something went wrong getting user data:', err);
+    });
 }
 
 /**
@@ -174,34 +129,70 @@ router.get('/', function(req, resp, next) {
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
   var auth_code = query.code;
+  var top_artists = [];
 
   // Have an authorization code, get an access token
   if (auth_code != null) {
-    // Retrieve an access token and a refresh token
-    spotifyApi.authorizationCodeGrant(auth_code)
-      .then(function(data) {
-        console.log('The token expires in ' + data.body['expires_in']);
-        console.log('The access token is ' + data.body['access_token']);
-        console.log('The refresh token is ' + data.body['refresh_token']);
+    var promise = spotifyApi.authorizationCodeGrant(auth_code);
+    promise.then(function(data) {
+      // Set the access token to use it in later calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.setRefreshToken(data.body['refresh_token']);
 
-        // Set the access token to use it in later calls
-        spotifyApi.setAccessToken(data.body['access_token']);
-        spotifyApi.setRefreshToken(data.body['refresh_token']);
+      return getTopArtists();
+    }).then(function() {
+      return spotifyApi.getMyTopArtists();
+    }).then(function(data) {
+      var top_artists = [];
 
-        spotifyApi.getMe()
-          .then(function(data) {
-            console.log('Some information about the authenticated user', data.body);
-          }, function(err) {
-            console.log('Something went wrong getting user data:', err);
-          });
-      }, function(err) {
-        console.log('Something went wrong with gaining authorization code grant:', err);
-      });
+      artists = data.body.items;
+      for (var i = 0; i < artists.length; i++) {
+        artist = artists[i];
+
+        parsed_artist = {
+          followers: artist.followers.total,
+          genres: artist.genres,
+          images: artist.images,
+          name: artist.name,
+          popularity: artist.popularity,
+          url: artist.external_urls.spotify
+        }
+
+        top_artists.push(parsed_artist);
+      }
+      
+      // Format top artists data
+      data = {
+        top_artists: top_artists
+      }
+
+      resp.render(
+        'index',
+        {
+          title: 'Statify',
+          authorized: true,
+          data: data
+        }
+      );
+    }).catch(function(err) {
+      console.log(err);
+      resp.render(
+        'index',
+        {
+          title: 'Statify',
+          authorized: false
+        }
+      );
+    });
   } else {
-    console.log("No code!");
+    resp.render(
+      'index',
+      {
+        title: 'Statify',
+        authorized: false
+      }
+    );
   }
-  
-  resp.render('index', { title: 'Statify' });
 });
 
 /**
