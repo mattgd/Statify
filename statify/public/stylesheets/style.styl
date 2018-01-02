@@ -7,7 +7,7 @@ body
   background: #202020
   overflow-x: hidden
 a
-  color: #00B7FF
+  color: #1ED760
 header
   width: 100%
   margin: 0 auto
@@ -88,3 +88,25 @@ h2
       flex: 1 0 auto
     p.title
       font-weight: bold
+      a
+        text-decoration: none
+        color: #222
+
+progress
+  display: block
+  width: 100%
+  border: 0
+  background: #eee
+
+progress::-moz-progress-bar
+  background: #1fef69
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+  progress
+    height: 20px
+
+progress::-webkit-progress-bar
+    background: transparent
+
+progress::-webkit-progress-value 
+  background: #1fef69

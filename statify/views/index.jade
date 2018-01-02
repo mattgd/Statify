@@ -8,11 +8,15 @@ block content
         div.cards
           each artist in data.top_artists
             div.card
-              if artist.images
-                div.card-image
-                  img(src=artist.images[0].url, alt=artist.name)
+              div.card-header
+                if artist.images
+                  div.card-image
+                    a(href=artist.url, rel="noopener", target="_blank")
+                      img(src=artist.images[0].url, alt=artist.name)
+                progress.popularity(max="100", value=artist.popularity)
               div.card-content
-                p.title=artist.name
+                p.title
+                  a(href=artist.url, rel="noopener", target="_blank")=artist.name
                 p.artist-details Followers: 
                   i #{artist.followers}
                 ul.genres
