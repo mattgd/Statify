@@ -2,10 +2,10 @@ html, body
   width: 100%
   height: 100%
 body
-  padding: 50px
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
   color: #FFF
   background: #202020
+  overflow-x: hidden
 a
   color: #00B7FF
 header
@@ -22,6 +22,9 @@ header
     margin: 0
 h2
   display: block
+.wrapper
+  width: 80%
+  margin: 0 auto
 
 .form-container
   margin: 20px 
@@ -48,12 +51,6 @@ h2
     cursor: pointer
     transition: 0.3s
 
-.container
-  display: flex
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap
-  
 .genres
   list-style: none
   padding: 0
@@ -67,26 +64,27 @@ h2
     font-style: italic
     color: #868e96
     display: inline-block
-    
-.artist
-  display: inline-block
-  flex-basis: 20%
+
+.cards
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+
+.card
+  flex: 0 1 19%
   border: 2px #FFF solid
   background: #FFF
   color: #222
-  width: calc(100% * (1/4) - 5px - 2px);
-  margin: 5px
-  .artist-image
-    margin: 0
+  .card-image
     img
       width: 100%
-  .artist-info
-    margin-top: 22px
+      height: auto
+  .card-content
+    margin-top: 12px
     padding: 0 10px
     width: 100%
     p
       margin: 0
-    p.artist-name
+      flex: 1 0 auto
+    p.title
       font-weight: bold
-    p.artist-artists
-      font-style: italic

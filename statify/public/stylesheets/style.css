@@ -4,10 +4,10 @@ body {
   height: 100%;
 }
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color: #fff;
   background: #202020;
+  overflow-x: hidden;
 }
 a {
   color: #00b7ff;
@@ -29,6 +29,10 @@ header p {
 }
 h2 {
   display: block;
+}
+.wrapper {
+  width: 80%;
+  margin: 0 auto;
 }
 .form-container {
   margin: 20px;
@@ -58,12 +62,6 @@ h2 {
   cursor: pointer;
   transition: 0.3s;
 }
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap;
-}
 .genres {
   list-style: none;
   padding: 0;
@@ -79,32 +77,30 @@ h2 {
   color: #868e96;
   display: inline-block;
 }
-.artist {
-  display: inline-block;
-  flex-basis: 20%;
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.card {
+  flex: 0 1 19%;
   border: 2px #fff solid;
   background: #fff;
   color: #222;
-  width: calc(100% * (1 / 4) - 5px - 2px);
-  margin: 5px;
 }
-.artist .artist-image {
-  margin: 0;
-}
-.artist .artist-image img {
+.card .card-image img {
   width: 100%;
+  height: auto;
 }
-.artist .artist-info {
-  margin-top: 22px;
+.card .card-content {
+  margin-top: 12px;
   padding: 0 10px;
   width: 100%;
 }
-.artist .artist-info p {
+.card .card-content p {
   margin: 0;
+  flex: 1 0 auto;
 }
-.artist .artist-info p.artist-name {
+.card .card-content p.title {
   font-weight: bold;
-}
-.artist .artist-info p.artist-artists {
-  font-style: italic;
 }

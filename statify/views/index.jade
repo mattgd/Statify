@@ -5,14 +5,14 @@ block content
     if authorized && data
       if data.top_artists
         h2 Your Top Artists
-        div.container
+        div.cards
           each artist in data.top_artists
-            div.artist
+            div.card
               if artist.images
-                div.artist-image
+                div.card-image
                   img(src=artist.images[0].url, alt=artist.name)
-              div.artist-info
-                p.artist-name=artist.name
+              div.card-content
+                p.title=artist.name
                 p.artist-details Followers: 
                   i #{artist.followers}
                 ul.genres
