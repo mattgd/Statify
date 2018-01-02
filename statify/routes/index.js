@@ -15,6 +15,16 @@ var credentials = {
 var spotifyApi = new SpotifyWebApi(credentials);
 
 /**
+ * Returns the number x with commas.
+ * @param {String} num The number to convert.
+ * @returns the number x with commas.
+ */
+function numberWithCommas(num) {
+  var values = num.toString().split('.');
+  return values[0].replace(/.(?=(?:.{3})+$)/g, '$&,') + ( values.length == 2 ? '.' + values[1] : '' )
+}
+
+/**
  * Returns true if the line matches a Spotify track URL,
  * and false otherwise.
  * @param {string} line The line to match to a Spotify track URL.
@@ -82,8 +92,10 @@ var parseTracks = function(tracks) {
  * @returns an Artist JSON object with the Statify-useful information.
  */
 function parseArtist(artist) {
+  console.log(numberWithCommas(artist.followers.total));
+
   return {
-    followers: artist.followers.total,
+    followers: numberWithCommas(artist.followers.total),
     genres: artist.genres,
     images: artist.images,
     name: artist.name,
@@ -147,18 +159,7 @@ router.get('/', function(req, resp, next) {
 
       artists = data.body.items;
       for (var i = 0; i < artists.length; i++) {
-        artist = artists[i];
-
-        parsed_artist = {
-          followers: artist.followers.total,
-          genres: artist.genres,
-          images: artist.images,
-          name: artist.name,
-          popularity: artist.popularity,
-          url: artist.external_urls.spotify
-        }
-
-        top_artists.push(parsed_artist);
+        top_artists.push(parseArtist(artists[i]));
       }
       
       // Format top artists data
