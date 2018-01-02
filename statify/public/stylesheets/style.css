@@ -60,16 +60,32 @@ h2 {
 }
 .container {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  flex-flow: row wrap;
+}
+.genres {
+  list-style: none;
+  padding: 0;
+}
+.genres li {
+  background: #eee;
+  border-radius: 500px;
+  padding: 3px 10px;
+  margin: 10px 10px 0px 0px;
+  font-size: 12px;
+  line-height: 16px;
+  font-style: italic;
+  color: #868e96;
+  display: inline-block;
 }
 .artist {
   display: inline-block;
-  width: 18%;
+  flex-basis: 20%;
   border: 2px #fff solid;
   background: #fff;
   color: #222;
+  width: calc(100% * (1 / 4) - 5px - 2px);
   margin: 5px;
 }
 .artist .artist-image {

@@ -23,6 +23,9 @@ app.use(cookieParser());
 app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.locals.sprintf = require('sprintf').sprintf;
+app.locals.format = "%+1.0f";
+
 app.use('/', index);
 
 // catch 404 and forward to error handler

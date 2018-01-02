@@ -13,8 +13,11 @@ block content
                   img(src=artist.images[0].url, alt=artist.name)
               div.artist-info
                 p.artist-name=artist.name
-                p.artist-details Followers: #{artist.followers}
-                p.artist-details Genres: #{artist.genres.join(', ')}
+                p.artist-details Followers: 
+                  i #{artist.followers}
+                ul.genres
+                  each genre in artist.genres
+                    li=genre
       else
         p There were no top artists found for your account.
     else
