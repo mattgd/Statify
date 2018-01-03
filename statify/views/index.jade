@@ -6,8 +6,10 @@ block content
       if data.top_artists
         h2 Your Top Artists
         div.cards
+          -var index = 1
           each artist in data.top_artists
             div.card
+              span.badge=index++
               div.card-header
                 if artist.images
                   div.card-image
@@ -17,15 +19,39 @@ block content
               div.card-content
                 p.title
                   a(href=artist.url, rel="noopener", target="_blank")=artist.name
-                p.artist-details Followers: 
-                  i #{artist.followers}
+                p.artist-details.small
+                  i #{artist.followers} followers
                 ul.genres
                   each genre in artist.genres
                     li=genre
       else
         p There were no top artists found for your account.
+      
+      if data.top_tracks
+        h2 Your Top Tracks
+        div.cards
+          -var index = 1
+          each track in data.top_tracks
+            div.card
+              span.badge=index++
+              div.card-header
+                if track.album.images
+                  div.card-image
+                    a(href=track.url, rel="noopener", target="_blank")
+                      img(src=track.album.images[0].url, alt=track.name)
+                progress.popularity(max="100", value=track.popularity)
+              div.card-content
+                p.title
+                  a(href=track.url, rel="noopener", target="_blank")=track.name
+                  br
+                  each artist in track.artists
+                    p.medium
+                      a(href=artist.url, rel="noopener", target="_blank")=artist.name
+                p.track-details.small Duration: 
+                  i #{track.duration}
+      else
+        p There were no top tracks found for your account.
     else
       div.form-container
         form.auth-form(name="auth-statify", method="post", action="authorize")
-          div.actions
             input(type="submit", value="Authorize Statify")

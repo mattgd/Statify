@@ -2,10 +2,12 @@ html, body
   width: 100%
   height: 100%
 body
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  font-family: 'Roboto', sans-serif
   color: #FFF
   background: #202020
   overflow-x: hidden
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
 a
   color: #1ED760
 header
@@ -16,20 +18,23 @@ header
   align-items: center;
   justify-content: center; 
   h1
-    font-size: 3em
-    margin: 7px
+    font-size: 4em
+    margin: 15px 0 7px 0
   p
     margin: 0
 h2
   display: block
+  font-size: 1.8em
+  margin-bottom: 7px
 .wrapper
   width: 80%
   margin: 0 auto
 
 .form-container
-  margin: 20px 
+  margin: 20px
+  text-align: center
 .auth-form
-  margin: 0 auto
+  display: inline-block
   text-align: center
   span.label
     textarea
@@ -68,29 +73,43 @@ h2
 .cards
   display: flex
   flex-wrap: wrap
-  justify-content: space-between
+  justify-content: space-evenly
 
 .card
-  flex: 0 1 19%
+  margin: 9px;
+  flex: 0 1 18%
   border: 2px #FFF solid
   background: #FFF
   color: #222
+  position: relative
   .card-image
     img
       width: 100%
       height: auto
   .card-content
-    margin-top: 12px
-    padding: 0 10px
+    padding: 10px
     width: 100%
     p
       margin: 0
       flex: 1 0 auto
+    .small
+      font-size: 13px
+    .medium
+      font-size: 14px
     p.title
       font-weight: bold
-      a
-        text-decoration: none
-        color: #222
+    a
+      text-decoration: none
+      color: #222
+    a:hover
+      text-decoration: underline
+  span.badge
+    position: absolute
+    top: -12px
+    left: -14px
+    padding: 3px 9px
+    border-radius: 500px
+    background: #1fef69
 
 progress
   display: block

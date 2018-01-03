@@ -86,14 +86,81 @@ var parseTracks = function(tracks) {
 };
 
 /**
+ * Converts milliseconds to a minutes and seconds string value.
+ * @param {integer} millis The time in milliseconds.
+ * @returns the milliseconds represented as minutes and seconds.
+ */
+function millisToMinutesAndSeconds(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
+/**
+ * Parses a Spotify Track object and returns an Track JSON object
+ * with the Statify-useful information.
+ * @param {object} track The track to parse.
+ * @returns an Track JSON object with the Statify-useful information.
+ */
+function parseTrack(track) {
+  artists = [];
+  for (var i = 0; i < track.artists.length; i++) {
+    artists.push(parseBasicArtist(track.artists[i]));
+  }
+
+  return {
+    album: {
+      name: track.album.name,
+      images: track.album.images,
+      url: track.album.external_urls.spotify
+    },
+    artists: artists,
+    duration: millisToMinutesAndSeconds(track.duration_ms),
+    name: track.name,
+    popularity: track.popularity,
+    preview_url: track.preview_url,
+    url: track.external_urls.spotify
+  }
+}
+
+/**
+ * Parses track data from the Spotify Web API returns a JSON
+ * list of top tracks for the user.
+ * @param {object} data The track data to parse.
+ * @returns a JSON list of top tracks for the user.
+ */
+function parseTopTracks(data) {
+  var top_tracks = [];
+
+  tracks = data.body.items;
+  for (var i = 0; i < tracks.length; i++) {
+    top_tracks.push(parseTrack(tracks[i]));
+  }
+  
+  return top_tracks;
+}
+
+/**
+ * Parses basic artist data (only includes external_urls,
+ * href, id, name, type, and uri) from the Spotify API into
+ * a Statify usable JSON object.
+ * @param {object} artist The basic artist data to parse.
+ * @returns a Statify usable JSON artist object.
+ */
+function parseBasicArtist(artist) {
+  return {
+    name: artist.name,
+    url: artist.external_urls.spotify
+  }
+}
+
+/**
  * Parses a Spotify Artist object and returns an Artist JSON object
  * with the Statify-useful information.
  * @param {object} artist The artist to parse.
  * @returns an Artist JSON object with the Statify-useful information.
  */
 function parseArtist(artist) {
-  console.log(numberWithCommas(artist.followers.total));
-
   return {
     followers: numberWithCommas(artist.followers.total),
     genres: artist.genres,
@@ -102,6 +169,23 @@ function parseArtist(artist) {
     popularity: artist.popularity,
     url: artist.external_urls.spotify
   }
+}
+
+/**
+ * Parses artist data from the Spotify Web API returns a JSON
+ * list of top artists for the user.
+ * @param {object} data The artist data to parse.
+ * @returns a JSON list of top artists for the user.
+ */
+function parseTopArtists(data) {
+  var top_artists = [];
+
+  artists = data.body.items;
+  for (var i = 0; i < artists.length; i++) {
+    top_artists.push(parseArtist(artists[i]));
+  }
+  
+  return top_artists;
 }
 
 function setSpotifyAccessToken(auth_code) {
@@ -118,22 +202,6 @@ function setSpotifyAccessToken(auth_code) {
     });
 }
 
-function getTopArtists() {
-  var top_artists = [];
-
-  spotifyApi.getMyTopArtists()
-    .then(function(data) {
-      artists = data.body.items;
-      for (var i = 0; i < artists.length; i++) {
-        top_artists.push(parseArtist(artists[i]));
-      }
-      
-      return top_artists;
-    }, function(err) {
-      console.log('Something went wrong getting user data:', err);
-    });
-}
-
 /**
  * Renders a GET request to the main page.
  */
@@ -145,34 +213,31 @@ router.get('/', function(req, resp, next) {
 
   // Have an authorization code, get an access token
   if (auth_code != null) {
+    var results = {
+      top_artists: top_artists
+    }
     var promise = spotifyApi.authorizationCodeGrant(auth_code);
     promise.then(function(data) {
       // Set the access token to use it in later calls
       spotifyApi.setAccessToken(data.body['access_token']);
       spotifyApi.setRefreshToken(data.body['refresh_token']);
-
-      return getTopArtists();
     }).then(function() {
       return spotifyApi.getMyTopArtists();
     }).then(function(data) {
-      var top_artists = [];
-
-      artists = data.body.items;
-      for (var i = 0; i < artists.length; i++) {
-        top_artists.push(parseArtist(artists[i]));
-      }
-      
       // Format top artists data
-      data = {
-        top_artists: top_artists
-      }
+      results['top_artists'] = parseTopArtists(data);
+    }).then(function() {
+      return spotifyApi.getMyTopTracks();
+    }).then(function(data) {
+      // Format top tracks data
+      results['top_tracks'] = parseTopTracks(data);
 
       resp.render(
         'index',
         {
           title: 'Statify',
           authorized: true,
-          data: data
+          data: results
         }
       );
     }).catch(function(err) {
