@@ -22,15 +22,21 @@ block content
                 p.title
                   a(href=artist.url, rel="noopener", target="_blank")=artist.name
                 p.artist-details.small
-                  i #{artist.followers} followers
+                  i #{artist.followers_str} followers
                 ul.genres
                   each genre in artist.genres
                     li=genre
                     
-        canvas(id="artist_popularity")
+        canvas(id="artist-popularity")
+        canvas(id="artist-followers")
         script.
-          var ctx = document.getElementById('artist_popularity').getContext('2d');
+          // Artist popularity chart
+          var ctx = document.getElementById('artist-popularity').getContext('2d');
           var chart = new Chart(ctx, !{data.charts.artist_popularity});
+          
+          // Artist followers chart
+          ctx = document.getElementById('artist-followers').getContext('2d');
+          chart = new Chart(ctx, !{data.charts.artist_followers});
       else
         p There were no top artists found for your account.
       

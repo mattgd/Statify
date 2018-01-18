@@ -4,7 +4,7 @@
         "labels": [],
         "datasets": [
             {
-                "label": "Popularity",
+                "label": "",
                 "backgroundColor": "rgb(255, 99, 132)",
                 "borderColor": "rgb(255, 99, 132)",
                 "data": []
@@ -17,7 +17,7 @@
         },
         "title": {
             "display": true,
-            "text": "Popularity of Your Top Artists",
+            "text": "",
             "fontColor": "white"
         },
         "scales": {

@@ -17,20 +17,6 @@ var credentials = {
 
 var spotifyApi = new SpotifyWebApi(credentials);
 
-function setSpotifyAccessToken(auth_code) {
-  // Retrieve an access token and a refresh token
-  spotifyApi.authorizationCodeGrant(auth_code)
-    .then(function(data) {
-      // Set the access token to use it in later calls
-      spotifyApi.setAccessToken(data.body['access_token']);
-      spotifyApi.setRefreshToken(data.body['refresh_token']);
-      return true;
-    }, function(err) {
-      console.log('Something went wrong with gaining authorization code grant:', err);
-      return false;
-    });
-}
-
 /**
  * Renders a GET request to the main page.
  */
@@ -60,24 +46,13 @@ router.get('/', function(req, resp, next) {
       // Format top tracks data
       results['top_tracks'] = tracks.parseTopTracks(data);
 
-      var artistPopChart = reports.getReportJson('artistPopularity.json');
-      var topArtists = results['top_artists'];
-      var labels = new Array();
-      var data = new Array();
-
-      for (var i = 0; i < topArtists.length; i++) {
-        var artist = topArtists[i];
-
-        labels.push(artist.name);
-        data.push(artist.popularity);
-      }
-      
-      artistPopChart.data.labels = labels;
-      artistPopChart.data.datasets[0]["data"] = data;
+      var artistPopChart = reports.createArtistPopChart(results['top_artists']);
+      var artistFollowersChart = reports.createArtistFollowersChart(results['top_artists']);
 
       // Add artist popularity chart to results
       results['charts'] = {
-        artist_popularity: JSON.stringify(artistPopChart)
+        artist_popularity: JSON.stringify(artistPopChart),
+        artist_followers: JSON.stringify(artistFollowersChart)
       };
 
       resp.render(

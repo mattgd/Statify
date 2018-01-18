@@ -8,7 +8,8 @@ var utils = require('./utils');
  */
 function parseArtist(artist) {
   return {
-    followers: utils.numberWithCommas(artist.followers.total),
+    followers: artist.followers.total,
+    followers_str: utils.numberWithCommas(artist.followers.total),
     genres: artist.genres,
     images: artist.images,
     name: artist.name,
