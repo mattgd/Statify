@@ -5,8 +5,8 @@
         "datasets": [
             {
                 "label": "",
-                "backgroundColor": "rgb(255, 99, 132)",
-                "borderColor": "rgb(255, 99, 132)",
+                "backgroundColor": "rgb(31,239,105)",
+                "borderColor": "rgb(23, 168, 75)",
                 "data": []
             }
         ]

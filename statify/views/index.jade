@@ -79,6 +79,11 @@ block content
                     div(id="volumeStatus")
                   div(id="songSlider", onclick="setSongPosition(this,event)")
                     div(id="trackProgress")
+        canvas(id="track-popularity")
+        script.
+          // Track popularity chart
+          var ctx = document.getElementById('track-popularity').getContext('2d');
+          var chart = new Chart(ctx, !{data.charts.track_popularity});
       else
         p There were no top tracks found for your account.
     else

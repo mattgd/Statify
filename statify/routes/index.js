@@ -48,11 +48,13 @@ router.get('/', function(req, resp, next) {
 
       var artistPopChart = reports.createArtistPopChart(results['top_artists']);
       var artistFollowersChart = reports.createArtistFollowersChart(results['top_artists']);
+      var trackPopChart = reports.createTrackPopChart(results['top_tracks']);
 
       // Add artist popularity chart to results
       results['charts'] = {
         artist_popularity: JSON.stringify(artistPopChart),
-        artist_followers: JSON.stringify(artistFollowersChart)
+        artist_followers: JSON.stringify(artistFollowersChart),
+        track_popularity: JSON.stringify(trackPopChart)
       };
 
       resp.render(

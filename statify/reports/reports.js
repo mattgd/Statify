@@ -79,5 +79,35 @@ module.exports = {
     artistFollowerChart.data.datasets[0]["data"] = data;
 
     return artistFollowerChart;
+  },
+
+  /**
+   * Creates the track popularity chart given top tracks data
+   * for a Spotify user.
+   * @param topTracks A user's top track data.
+   * @returns a proper Chart.js JSON object for the track
+   * popularity chart.
+   */
+  createTrackPopChart: function(topTracks) {
+    var trackPopChart = getReportJson('barChart.json');
+    var labels = new Array();
+    var data = new Array();
+
+    // Setup type, title and axes labels
+    trackPopChart["type"] = "horizontalBar";
+    trackPopChart["data"]["datasets"][0]["label"] = "Popularity";
+    trackPopChart["options"]["title"]["text"] = "Popularity of Your Top Tracks";
+
+    for (var i = 0; i < topTracks.length; i++) {
+      var track = topTracks[i];
+
+      labels.push(track.name + " - " + track.artists[0].name);
+      data.push(track.popularity);
+    }
+      
+    trackPopChart.data.labels = labels;
+    trackPopChart.data.datasets[0]["data"] = data;
+
+    return trackPopChart;
   }
 };
