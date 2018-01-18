@@ -72,14 +72,14 @@ h2 {
   padding: 0;
 }
 .genres li {
-  background: #eee;
+  background: #777;
   border-radius: 500px;
   padding: 3px 10px;
-  margin: 10px 10px 0px 0px;
+  margin: 5px 5px 0px 0px;
   font-size: 12px;
   line-height: 16px;
   font-style: italic;
-  color: #868e96;
+  color: #fff;
   display: inline-block;
 }
 .cards {
@@ -150,4 +150,49 @@ progress::-webkit-progress-bar {
 }
 progress::-webkit-progress-value {
   background: #1fef69;
+}
+.data {
+  border-collapse: separate;
+  border-spacing: 0 0.8em;
+  width: 100%;
+}
+.data thead tr td {
+  font-weight: bold;
+  padding: 7px;
+}
+.data tr {
+  outline: 1px solid #444;
+  padding: 5px 0;
+  background: #333;
+  text-align: center;
+}
+.data tr img {
+  width: 100px;
+  height: 100px;
+}
+.data td {
+  border-right: 1px solid #444;
+}
+.data .rank {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.data .art {
+  width: 100px;
+  padding: 0;
+}
+.data td:last-child {
+  border-right: 0;
+}
+.data a {
+  text-decoration: none;
+  display: block;
+  max-height: 100px;
+}
+.data a:hover {
+  text-decoration: underline;
+}
+.data p.dim {
+  display: inline-block;
+  color: #bbb;
 }

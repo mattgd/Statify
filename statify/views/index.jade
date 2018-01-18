@@ -7,25 +7,54 @@ block content
 
       if data.top_artists
         h2 Your Top Artists
-        div.cards
-          -var index = 1
-          each artist in data.top_artists
-            div.card
-              span.badge=index++
-              div.card-header
-                if artist.images
-                  div.card-image
-                    a(href=artist.url, rel="noopener", target="_blank")
-                      img(src=artist.images[0].url, alt=artist.name)
-                progress.popularity(max="100", value=artist.popularity)
-              div.card-content
-                p.title
+        table.data(cellpadding="0", cellspacing="0")
+          thead
+            tr
+              td="Rank"
+              td.art="Art"
+              td="Artist"
+              td="Popularity Rating"
+              td="Followers"
+              td="Top Genres"
+          tbody
+            -var index = 1
+
+            each artist in data.top_artists
+              tr
+                td.rank=index++
+                td.art
+                  a(href=artist.url, rel="noopener", target="_blank")
+                    img(src=artist.images[0].url, alt=artist.name)
+                td
                   a(href=artist.url, rel="noopener", target="_blank")=artist.name
-                p.artist-details.small
-                  i #{artist.followers_str} followers
-                ul.genres
-                  each genre in artist.genres
-                    li=genre
+                td #{artist.popularity}
+                  p.dim="/100"
+                td
+                  i #{artist.followers_str}
+                td
+                  ul.genres
+                    each genre in artist.genres
+                      li=genre
+        //-
+          div.cards
+            -var index = 1
+            each artist in data.top_artists
+              div.card
+                span.badge=index++
+                div.card-header
+                  if artist.images
+                    div.card-image
+                      a(href=artist.url, rel="noopener", target="_blank")
+                        img(src=artist.images[0].url, alt=artist.name)
+                  progress.popularity(max="100", value=artist.popularity)
+                div.card-content
+                  p.title
+                    a(href=artist.url, rel="noopener", target="_blank")=artist.name
+                  p.artist-details.small
+                    i #{artist.followers_str} followers
+                  ul.genres
+                    each genre in artist.genres
+                      li=genre
                     
         canvas(id="artist-popularity")
         canvas(id="artist-followers")
@@ -42,27 +71,54 @@ block content
       
       if data.top_tracks
         h2 Your Top Tracks
-        div.cards
-          -var index = 1
-          each track in data.top_tracks
-            div.card
-              span.badge=index++
-              div.card-header
-                if track.album.images
-                  div.card-image
+        table.data(cellpadding="0", cellspacing="0")
+          thead
+            tr
+              td="Rank"
+              td.art="Album Art"
+              td="Track"
+              td="Artist"
+              td="Popularity Rating"
+              td="Duration"
+          tbody
+            -var index = 1
+            
+            each track in data.top_tracks
+              tr
+                td.rank=index++
+                td.art
+                  if track.album.images
                     a(href=track.url, rel="noopener", target="_blank")
                       img(src=track.album.images[0].url, alt=track.name)
-                progress.popularity(max="100", value=track.popularity)
-              div.card-content
-                p.title
+                td
                   a(href=track.url, rel="noopener", target="_blank")=track.name
-                  br
+                td 
                   each artist in track.artists
-                    p.medium
-                      a(href=artist.url, rel="noopener", target="_blank")=artist.name
-                p.track-details.small Duration: 
-                  i #{track.duration}
-                //-
+                    a(href=artist.url, rel="noopener", target="_blank")=artist.name
+                td #{track.popularity}
+                  p.dim="/100"
+                td=track.duration
+        //-
+          div.cards
+            -var index = 1
+            each track in data.top_tracks
+              div.card
+                span.badge=index++
+                div.card-header
+                  if track.album.images
+                    div.card-image
+                      a(href=track.url, rel="noopener", target="_blank")
+                        img(src=track.album.images[0].url, alt=track.name)
+                  progress.popularity(max="100", value=track.popularity)
+                div.card-content
+                  p.title
+                    a(href=track.url, rel="noopener", target="_blank")=track.name
+                    br
+                    each artist in track.artists
+                      p.medium
+                        a(href=artist.url, rel="noopener", target="_blank")=artist.name
+                  p.track-details.small Duration: 
+                    i #{track.duration}
                   audio(id="song", ontimeupdate="updateTime()")
                     source(src=track.preview_url, type="audio/mpeg")
                     | Your browser does not support the audio tag.

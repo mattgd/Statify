@@ -10,7 +10,7 @@ function parseArtist(artist) {
   return {
     followers: artist.followers.total,
     followers_str: utils.numberWithCommas(artist.followers.total),
-    genres: artist.genres,
+    genres: artist.genres.slice(1, 6),
     images: artist.images,
     name: artist.name,
     popularity: artist.popularity,
