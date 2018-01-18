@@ -3,6 +3,8 @@ extends layout
 block content
   div.wrapper
     if authorized && data
+      script(src="js/Chart.min.js")
+
       if data.top_artists
         h2 Your Top Artists
         div.cards
@@ -24,6 +26,11 @@ block content
                 ul.genres
                   each genre in artist.genres
                     li=genre
+                    
+        canvas(id="artist_popularity")
+        script.
+          var ctx = document.getElementById('artist_popularity').getContext('2d');
+          var chart = new Chart(ctx, !{data.charts.artist_popularity});
       else
         p There were no top artists found for your account.
       
@@ -66,12 +73,6 @@ block content
                     div(id="volumeStatus")
                   div(id="songSlider", onclick="setSongPosition(this,event)")
                     div(id="trackProgress")
-
-        script(src="js/Chart.min.js")
-        canvas(id="artist_popularity")
-        script.
-          var ctx = document.getElementById('artist_popularity').getContext('2d');
-          var chart = new Chart(ctx, !{data.charts.artist_popularity});
       else
         p There were no top tracks found for your account.
     else
