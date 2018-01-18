@@ -49,6 +49,29 @@ block content
                       a(href=artist.url, rel="noopener", target="_blank")=artist.name
                 p.track-details.small Duration: 
                   i #{track.duration}
+                //-
+                  audio(id="song", ontimeupdate="updateTime()")
+                    source(src=track.preview_url, type="audio/mpeg")
+                    | Your browser does not support the audio tag.
+                  div(id="songPlay", onclick="play('song')")=Play
+                  div(id="songPause", onclick="pause()")=Pause
+                  div(id="songPlayPause", onclick="playPause('song')")=PlayPause
+                  div(id="songStop", onclick="stopSong()")=Stop
+                  div(id="songTime")
+                    | 0:00 / 0:00
+                  div(id="volumeUp", onclick="changeVolume(10, 'up')")=Plus
+                  br
+                  div(id="volumeDown", onclick="changeVolume(10, 'down')")=Minus
+                  div(id="volumeMeter", onclick="setNewVolume(this,event)")
+                    div(id="volumeStatus")
+                  div(id="songSlider", onclick="setSongPosition(this,event)")
+                    div(id="trackProgress")
+
+        script(src="js/Chart.min.js")
+        canvas(id="artist_popularity")
+        script.
+          var ctx = document.getElementById('artist_popularity').getContext('2d');
+          var chart = new Chart(ctx, !{data.charts.artist_popularity});
       else
         p There were no top tracks found for your account.
     else

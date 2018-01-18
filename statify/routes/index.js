@@ -5,6 +5,8 @@ var https = require("https");
 var localConfig = require('../local_config');
 var SpotifyWebApi = require('spotify-web-api-node');
 var url = require('url');
+var fs = require("fs");
+var path = require('path'); 
 
 var credentials = {
   clientId : localConfig.spotify.clientId,
@@ -13,6 +15,22 @@ var credentials = {
 };
 
 var spotifyApi = new SpotifyWebApi(credentials);
+
+/**
+ * Reads in a local JSON file at the specified path.
+ * @param {*} filePath The local path to the file.
+ * @returns the JSON contents of the file.
+ */
+function readJsonFileSync(filePath) {
+  var file = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(file);
+}
+
+function getReportJson(fileName) {
+  var parentDir = path.dirname(fileName).split(path.sep).pop();
+  var filePath = parentDir + '/reports/' + fileName;
+  return readJsonFileSync(filePath);
+}
 
 /**
  * Returns the number x with commas.
@@ -209,12 +227,11 @@ router.get('/', function(req, resp, next) {
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
   var auth_code = query.code;
-  var top_artists = [];
 
   // Have an authorization code, get an access token
   if (auth_code != null) {
     var results = {
-      top_artists: top_artists
+      top_artists: []
     }
     var promise = spotifyApi.authorizationCodeGrant(auth_code);
     promise.then(function(data) {
@@ -231,6 +248,26 @@ router.get('/', function(req, resp, next) {
     }).then(function(data) {
       // Format top tracks data
       results['top_tracks'] = parseTopTracks(data);
+
+      var chartOptions = getReportJson('artistsPopularity.json');
+      var topArtists = results['top_artists'];
+      var labels = new Array();
+      var data = new Array();
+
+      for (var i = 0; i < topArtists.length; i++) {
+        var artist = topArtists[i];
+
+        labels.push(artist.name);
+        data.push(artist.popularity);
+      }
+      
+      chartOptions.data.labels = labels;
+      chartOptions.data.datasets[0]["data"] = data;
+
+      // Add artist popularity chart to results
+      results['charts'] = {
+        artist_popularity: JSON.stringify(chartOptions)
+      };
 
       resp.render(
         'index',

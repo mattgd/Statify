@@ -1,0 +1,41 @@
+{
+    "type": "bar",
+    "data": {
+        "labels": [],
+        "datasets": [
+            {
+                "label": "Popularity",
+                "backgroundColor": "rgb(255, 99, 132)",
+                "borderColor": "rgb(255, 99, 132)",
+                "data": []
+            }
+        ]
+    },
+    "options": {
+        "legend": {
+            "display": false
+        },
+        "title": {
+            "display": true,
+            "text": "Popularity of Your Top Artists",
+            "fontColor": "white"
+        },
+        "scales": {
+            "yAxes": [
+                {
+                    "ticks": {
+                        "beginAtZero": true,
+                        "fontColor": "white"
+                    }
+                }
+            ],
+            "xAxes": [
+                {
+                    "ticks": {
+                        "fontColor": "white"
+                    }
+                }
+            ]
+        }
+    }
+}

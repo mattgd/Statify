@@ -1,0 +1,28 @@
+#songPlay,
+#songPause,
+#songStop,
+#songPlayPause,
+#songSlider {
+  width: 500px;
+  height: 10px;
+  background-color: #000;
+}
+/*Track progress bar*/
+#trackProgress {
+  width: 0px;
+  height: 10px;
+  background-color: #f00;
+}
+/*Volume Up Button*/
+/*Volume Down Button*/
+/*Volume Meter*/
+#volumeMeter {
+  width: 500px;
+  height: 10px;
+  background-color: #000;
+}
+/*Volume Location Meter*/
+#volumeStatus {
+  height: 10px;
+  background-color: #008000;
+}
