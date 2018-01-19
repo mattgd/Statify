@@ -146,12 +146,16 @@ block content
           var ctx = document.getElementById('track-popularity').getContext('2d');
           var chart = new Chart(ctx, !{data.charts.track_popularity});
       else
-        p There were no top tracks found for your account.  
+        p There were no top tracks found for your account.
+    footer
+      p Statify is not affiliated with Spotify AB.
   else
     div.hero
       header.animated.fadeInDown
         h1 Statify
-        p Statistics about your musical habits on Spotify.
+        p Statistics about your musical habits on #[a(href="https://www.spotify.com/", target="_blank", rel="noopener")="Spotify"].
         div.form-container
           form.auth-form(name="auth-statify", method="post", action="authorize")
               input(type="submit", value="Authorize Statify")
+      footer.sticky-footer 
+        p Statify is not affiliated with Spotify AB.

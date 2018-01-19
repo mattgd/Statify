@@ -14,6 +14,10 @@ body {
 }
 a {
   color: #1ed760;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 header {
   width: 100%;
@@ -87,7 +91,7 @@ h2 {
   display: block;
 }
 .auth-form input {
-  padding: 10px 20px;
+  padding: 15px 25px;
   color: #fff;
   font-weight: bold;
   background: #1ed760;
@@ -98,6 +102,7 @@ h2 {
   margin: 5px 0;
   border-radius: 500px;
   display: block;
+  text-transform: uppercase;
 }
 .auth-form input:hover {
   background: #1fef69;
@@ -119,74 +124,17 @@ h2 {
   color: #fff;
   display: inline-block;
 }
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-}
-.card {
-  margin: 9px;
-  flex: 0 1 18%;
-  border: 2px #fff solid;
-  background: #fff;
-  color: #222;
-  position: relative;
-}
-.card .card-image img {
+footer {
   width: 100%;
-  height: auto;
+  text-align: center;
+  margin: 0 auto;
 }
-.card .card-content {
-  padding: 10px;
-  width: 100%;
+footer p {
+  font-size: 0.9em;
 }
-.card .card-content p {
-  margin: 0;
-  flex: 1 0 auto;
-}
-.card .card-content .small {
-  font-size: 13px;
-}
-.card .card-content .medium {
-  font-size: 14px;
-}
-.card .card-content p.title {
-  font-weight: bold;
-}
-.card .card-content a {
-  text-decoration: none;
-  color: #222;
-}
-.card .card-content a:hover {
-  text-decoration: underline;
-}
-.card span.badge {
+.sticky-footer {
   position: absolute;
-  top: -12px;
-  left: -14px;
-  padding: 3px 9px;
-  border-radius: 500px;
-  background: #1fef69;
-}
-progress {
-  display: block;
-  width: 100%;
-  border: 0;
-  background: #eee;
-}
-progress::-moz-progress-bar {
-  background: #1fef69;
-}
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-  progress {
-    height: 20px;
-  }
-}
-progress::-webkit-progress-bar {
-  background: transparent;
-}
-progress::-webkit-progress-value {
-  background: #1fef69;
+  bottom: 5px;
 }
 .data {
   border-collapse: separate;
@@ -222,21 +170,12 @@ progress::-webkit-progress-value {
   border-right: 0;
 }
 .data a {
-  text-decoration: none;
   display: block;
   max-height: 100px;
-}
-.data a:hover {
-  text-decoration: underline;
 }
 .data p.dim {
   display: inline-block;
   color: #bbb;
-}
-.hero,
-.jumbotron {
-  opacity: 1;
-  transition: 1s opacity;
 }
 .animated {
   -webkit-animation-duration: 1s;

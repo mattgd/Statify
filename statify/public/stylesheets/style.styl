@@ -11,6 +11,9 @@ body
   margin: 0
 a
   color: #1ED760
+  text-decoration: none
+a:hover
+  text-decoration: underline
 header
   width: 100%
   margin: 0 auto
@@ -81,7 +84,7 @@ h2
     textarea
       display: block
   input
-    padding: 10px 20px
+    padding: 15px 25px
     color: #FFF
     font-weight: bold
     background: #1ED760
@@ -92,6 +95,7 @@ h2
     margin: 5px 0
     border-radius: 500px;
     display: block
+    text-transform: uppercase
   input:hover
     background: #1fef69
     cursor: pointer
@@ -111,65 +115,15 @@ h2
     color: #FFF
     display: inline-block
 
-.cards
-  display: flex
-  flex-wrap: wrap
-  justify-content: space-evenly
-
-.card
-  margin: 9px;
-  flex: 0 1 18%
-  border: 2px #FFF solid
-  background: #FFF
-  color: #222
-  position: relative
-  .card-image
-    img
-      width: 100%
-      height: auto
-  .card-content
-    padding: 10px
-    width: 100%
-    p
-      margin: 0
-      flex: 1 0 auto
-    .small
-      font-size: 13px
-    .medium
-      font-size: 14px
-    p.title
-      font-weight: bold
-    a
-      text-decoration: none
-      color: #222
-    a:hover
-      text-decoration: underline
-  span.badge
-    position: absolute
-    top: -12px
-    left: -14px
-    padding: 3px 9px
-    border-radius: 500px
-    background: #1fef69
-
-progress
-  display: block
+footer
   width: 100%
-  border: 0
-  background: #eee
-
-progress::-moz-progress-bar
-  background: #1fef69
-
-@media screen and (-webkit-min-device-pixel-ratio:0)
-  progress
-    height: 20px
-
-progress::-webkit-progress-bar
-    background: transparent
-
-progress::-webkit-progress-value 
-  background: #1fef69
+  text-align: center
+  margin: 0 auto
+  p
+    font-size: 0.9em
+.sticky-footer
+  position: absolute
+  bottom: 5px
 
 .data
   border-collapse: separate
@@ -199,18 +153,11 @@ progress::-webkit-progress-value
   td:last-child
     border-right: 0
   a
-    text-decoration: none
     display: block
     max-height: 100px
-  a:hover
-    text-decoration: underline
   p.dim
     display: inline-block
     color: #BBB
-
-.hero, .jumbotron
-  opacity: 1
-  transition: 1s opacity
 
 .animated
   	-webkit-animation-duration: 1s
