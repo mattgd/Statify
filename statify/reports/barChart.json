@@ -18,7 +18,9 @@
         "title": {
             "display": true,
             "text": "",
-            "fontColor": "white"
+            "fontColor": "white",
+            "fontSize": 18,
+            "fontFamily": "'Roboto', sans-serif"
         },
         "scales": {
             "yAxes": [

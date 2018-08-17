@@ -35,6 +35,8 @@ router.get('/', function(req, resp, next) {
       // Set the access token to use it in later calls
       spotifyApi.setAccessToken(data.body['access_token']);
       spotifyApi.setRefreshToken(data.body['refresh_token']);
+
+      //console.log(data.body['expires_in']);
     }).then(function() {
       return spotifyApi.getMyTopArtists();
     }).then(function(data) {
