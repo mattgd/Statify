@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const request = require('request');
-var https = require("https");
 var localConfig = require('../local_config');
 var SpotifyWebApi = require('spotify-web-api-node');
 var url = require('url');
@@ -30,6 +28,7 @@ router.get('/', function(req, resp, next) {
     var results = {
       top_artists: []
     }
+
     var promise = spotifyApi.authorizationCodeGrant(auth_code);
     promise.then(function(data) {
       // Set the access token to use it in later calls
