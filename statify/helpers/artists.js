@@ -1,4 +1,4 @@
-var utils = require('./utils');
+const utils = require('./utils');
 
 /**
  * Parses a Spotify Artist object and returns an Artist JSON object
@@ -40,11 +40,11 @@ module.exports = {
    * @returns a JSON list of top artists for the user.
   */
   parseTopArtists: function (data) {
-    var top_artists = [];
+    const artists = data.body.items;
+    let top_artists = [];
 
-    artists = data.body.items;
-    for (var i = 0; i < artists.length; i++) {
-      top_artists.push(parseArtist(artists[i]));
+    for (var artist of artists) {
+      top_artists.push(parseArtist(artist));
     }
 
     return top_artists;

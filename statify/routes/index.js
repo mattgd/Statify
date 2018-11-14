@@ -1,27 +1,27 @@
-var express = require('express');
-var router = express.Router();
-var localConfig = require('../local_config');
-var SpotifyWebApi = require('spotify-web-api-node');
-var url = require('url');
-var artists = require('../helpers/artists');
-var tracks = require('../helpers/tracks');
-var reports = require('../reports/reports');
+const express = require('express');
+const router = express.Router();
+const localConfig = require('../local_config');
+const SpotifyWebApi = require('spotify-web-api-node');
+const url = require('url');
+const artists = require('../helpers/artists');
+const tracks = require('../helpers/tracks');
+const reports = require('../reports/reports');
 
-var credentials = {
+const credentials = {
   clientId : localConfig.spotify.clientId,
   clientSecret : localConfig.spotify.clientSecret,
   redirectUri : 'http://localhost:3000/'
 };
 
-var spotifyApi = new SpotifyWebApi(credentials);
+const spotifyApi = new SpotifyWebApi(credentials);
 
 /**
  * Renders a GET request to the main page.
  */
 router.get('/', function(req, resp, next) {
-  var url_parts = url.parse(req.url, true);
-  var query = url_parts.query;
-  var auth_code = query.code;
+  const url_parts = url.parse(req.url, true);
+  const query = url_parts.query;
+  const auth_code = query.code;
 
   // Have an authorization code, get an access token
   if (auth_code != null) {
@@ -91,29 +91,21 @@ router.get('/', function(req, resp, next) {
  * Renders a POST request to the authorization page.
  */
 router.post('/authorize', function(req, resp) {
-  var scopes = [
+  const scopes = [
     'user-library-read', 'user-top-read',
     'user-read-recently-played', 'user-read-currently-playing'
   ];
-  var redirectUri = 'http://localhost:3000/';
-  var clientId = localConfig.spotify.clientId;
-  var state = 'some-state-of-my-choice'; // TODO: Change to hash of user cookie
+  const redirectUri = 'http://localhost:3000/';
+  const clientId = localConfig.spotify.clientId;
+  const state = 'some-state-of-my-choice'; // TODO: Change to hash of user cookie
 
   // Setting credentials can be done in the wrapper's constructor, or using the API object's setters.
-  var spotifyApi = new SpotifyWebApi({
-    redirectUri : redirectUri,
-    clientId : clientId
-  });
+  var spotifyApi = new SpotifyWebApi({ redirectUri, clientId });
 
   // Create the authorization URL
   var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
 
-  resp.writeHead(301,
-    {
-      Location: authorizeURL
-    }
-  );
-
+  resp.writeHead(301, { Location: authorizeURL });
   resp.end();
 });
 

@@ -1,4 +1,4 @@
-var artists = require('./artists');
+var artistUtils = require('./artists');
 var utils = require('./utils');
 
 /**
@@ -8,9 +8,9 @@ var utils = require('./utils');
 * @returns an Track JSON object with the Statify-useful information.
 */
 function parseTrack(track) {
-  trackArtists = [];
-  for (var i = 0; i < track.artists.length; i++) {
-    trackArtists.push(artists.parseBasicArtist(track.artists[i]));
+  let trackArtists = [];
+  for (var artist of track.artists) {
+    trackArtists.push(artistUtils.parseBasicArtist(artist));
   }
 
   return {
@@ -37,20 +37,17 @@ module.exports = {
    * album and album image URL, and an Array of artists.
    */
   parseTracks: function(tracks) {
-    parsedTracks = [];
+    let parsedTracks = [];
 
     // Parse the tracks for use in the view
-    for (var i = 0, len = tracks.length; i < len; i++) {
-      track = tracks[i];
-
+    for (var track in tracks) {
       album = {
         name: track.album.name,
         image: track.album.images[0].url
       };
 
-      artists = [];
-      for (var j = 0, artistsLen = track.artists.length; j < artistsLen; j++) {
-        artist = track.artists[j];
+      let artists = [];
+      for (var artist in track.artists) {
         artists.push(artist.name);
       }
 
@@ -58,8 +55,8 @@ module.exports = {
       parsedTracks.push(
         {
           name: track.name,
-          album: album,
-          artists: artists
+          album,
+          artists
         }
       );
     }
@@ -70,15 +67,15 @@ module.exports = {
   /**
    * Parses track data from the Spotify Web API returns a JSON
    * list of top tracks for the user.
-   * @param {object} data The track data to parse.
+   * @param {Object} data The track data to parse.
    * @returns a JSON list of top tracks for the user.
    */
   parseTopTracks: function(data) {
-    var top_tracks = [];
+    let tracks = data.body.items;
+    let top_tracks = [];
 
-    tracks = data.body.items;
-    for (var i = 0; i < tracks.length; i++) {
-      top_tracks.push(parseTrack(tracks[i]));
+    for (var track of tracks) {
+      top_tracks.push(parseTrack(track));
     }
     
     return top_tracks;
