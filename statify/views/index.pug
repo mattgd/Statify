@@ -3,9 +3,9 @@ extends layout
 block content
   if authorized && data
     div.jumbotron
-        header
-            h1 Statify
-            p Statistics about your musical habits on Spotify.
+      header
+        h1 Statify
+        p Statistics about your musical habits on Spotify.
 
     div.wrapper
       script(src="js/Chart.min.js")
@@ -156,6 +156,6 @@ block content
         p Statistics about your musical habits on #[a(href="https://www.spotify.com/", target="_blank", rel="noopener")="Spotify"].
         div.form-container
           form.auth-form(name="auth-statify", method="post", action="authorize")
-              input(type="submit", value="Authorize Statify")
+            input(type="submit", value="Authorize Statify")
       footer.sticky-footer 
         p Statify is not affiliated with Spotify AB.
