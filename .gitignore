@@ -58,5 +58,6 @@ typings/
 .env
 
 # Anything else
-statify/local_config.js
+local_config.js
 .vscode
+.DS_Store
