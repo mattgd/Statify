@@ -1,6 +1,12 @@
 import React from 'react';
 import useFetch from 'react-fetch-hook';
+// import { ButtonBack, ButtonNext, CarouselProvider, Slider, Slide } from 'pure-react-carousel';
+import Carousel from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
+
 import { TOP_ARTISTS_ENDPOINT } from '../utils/apiUtils';
+import ArtistCard from './ArtistCard';
+import { Icon } from 'semantic-ui-react';
 
 const TopArtists: React.FC = () => {
   const { isLoading, data } = useFetch<Artist[]>(TOP_ARTISTS_ENDPOINT, {
@@ -13,7 +19,21 @@ const TopArtists: React.FC = () => {
     return (
       <div className="top-artists">
         <h2>Your Top Artists</h2>
-        <table className="data" cellPadding="0" cellSpacing="0">
+        <Carousel
+          arrowLeft={<Icon className="big" name="arrow alternate circle left" />}
+          arrowRight={<Icon className="big" name="arrow alternate circle right" />}
+          addArrowClickHandler
+          slidesPerPage={5}
+          slidesPerScroll={1}
+          offset={50}
+          itemWidth={250}
+          clickToChange
+          centered
+        >
+          {data?.map((artist: Artist) => <ArtistCard key={artist.url} artist={artist} />)}
+        </Carousel>
+        
+        {/* <table className="data" cellPadding="0" cellSpacing="0">
           <thead>
             <tr>
               <td>Rank</td>
@@ -51,7 +71,7 @@ const TopArtists: React.FC = () => {
             </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     );
   }
